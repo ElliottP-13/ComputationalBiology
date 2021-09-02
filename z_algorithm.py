@@ -9,7 +9,7 @@ def print_output(z):
     if len(z) > 0:
         z = [str(i) for i in z]
         output = ', '.join(z)
-        print(f"Found matches {output[:-2]}")
+        print(f"Found matches {output}")
     else:
         print("No match found")
 
@@ -99,7 +99,10 @@ def analyze_fasta(pattern, filepath):
             if started:
                 z = z_pattern_match(pattern, text.replace('\n', ''))
                 print_output(z)
-            print(f"Analyzing Sequence: {line.replace('>', '')}")
+            started = True
+            print(f"Analyzing Sequence: {line.replace('>', '').strip()}")
+        else:
+            text += line.strip()
     z = z_pattern_match(pattern, text.replace('\n', ''))
     print_output(z)
 
@@ -109,7 +112,7 @@ if __name__ == '__main__':
         # expect arguments z_algorithm.py <pattern> <path to file>
         pattern = sys.argv[1]
         filepath = sys.argv[2]
-        pass
+        analyze_fasta(pattern, filepath)
     else:
         print(z_pattern_match('aa', 'aaaaaaaaaaaaa'))
 
