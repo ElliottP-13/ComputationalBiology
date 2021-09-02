@@ -1,3 +1,17 @@
+"""
+Author - Elliott Pryor
+Created on - 2 September 2021
+"""
+import sys
+
+
+def print_output(z):
+    if len(z) > 0:
+        z = [str(i) for i in z]
+        output = ', '.join(z)
+        print(f"Found matches {output[:-2]}")
+    else:
+        print("No match found")
 
 def find_next_match(s1, s2, S):
     """
@@ -74,6 +88,28 @@ def z_pattern_match(pattern, text, special_char=None):
     return matches
 
 
+def analyze_fasta(pattern, filepath):
+    file = open(filepath)
+    print(f"Opening: {filepath}")
+    print(f"Matching pattern: {pattern}")
+    started = False
+    text = ''
+    for line in file:
+        if line.startswith('>'):
+            if started:
+                z = z_pattern_match(pattern, text.replace('\n', ''))
+                print_output(z)
+            print(f"Analyzing Sequence: {line.replace('>', '')}")
+    z = z_pattern_match(pattern, text.replace('\n', ''))
+    print_output(z)
+
+
 if __name__ == '__main__':
-    print(z_pattern_match('aa', 'aaaaaaaaaaaaa'))
+    if len(sys.argv) > 1:
+        # expect arguments z_algorithm.py <pattern> <path to file>
+        pattern = sys.argv[1]
+        filepath = sys.argv[2]
+        pass
+    else:
+        print(z_pattern_match('aa', 'aaaaaaaaaaaaa'))
 
