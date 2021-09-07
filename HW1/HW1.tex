@@ -1,25 +1,38 @@
-\documentclass[12pt]{article}
-\usepackage[utf8]{inputenc}\usepackage{geometry}
-\usepackage{xcolor}
-\geometry{margin=1in}
+\documentclass[11pt]{article}
+\usepackage{../EllioStyle}
 
 \title{Homework 1}
 \author{Elliott Pryor}
 \date{7 September 2021}
 
-\begin{document}
+\rhead{Homework 1}
 
+\begin{document}
 \maketitle
 
-
+\problem{1}
 
 For the following mRNA sequence, can you extract its 5’ UTR, 3’ UTR
 and the protein sequence?
-
 ACTTGTCATGGTAACTCCGTCGTACCAGTAGGTCATG
 
 \hrule
 
+So the above is actually DNA, despite what the question says. I assume it is oriented 5' $\rightarrow$ 3' 
+So we transcribe it into:
 
+3' UGAACAGUACCAUUGAGGCAGCAUGGUCAUCCAGUAC 5'
+%ACUUGUCAUGGUAACUCCGUCGUACCAGUAGGUCAUG
+
+We translate it 5' $\rightarrow$ 3', so we need to flip it.
+
+CAUGACCUACUGGUACGACGGAGUUACCAUGACAAGU
+
+The start codon is AUG (Met), so the 5' UTR is everything left of this: which in this case is just C
+
+We then translate,
+AUGGUCAUCCAGUAC $\rightarrow$ MET, THR, TYR, TRP, TYR, ASP, GLY, VAL, THR, MET, THR, SER
+
+We don't have a stop codon. So there is no UTR on the 3' end, and translation stops by hitting the end of the sequence.
 
 \end{document}
