@@ -108,11 +108,12 @@ def analyze_fasta(pattern, filepath):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1:
+    if len(sys.argv) == 3:
+        # run fasta file
         # expect arguments z_algorithm.py <pattern> <path to file>
         pattern = sys.argv[1]
         filepath = sys.argv[2]
         analyze_fasta(pattern, filepath)
     else:
-        print(z_pattern_match('aa', 'aaaaaaaaaaaaa'))
+        print(z_alg('aabbabaaa'))
 
