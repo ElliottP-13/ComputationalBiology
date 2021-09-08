@@ -18,21 +18,20 @@ ACTTGTCATGGTAACTCCGTCGTACCAGTAGGTCATG
 
 \hrule
 
-So the above is actually DNA, despite what the question says. I assume it is oriented 5' $\rightarrow$ 3' 
-So we transcribe it into:
+So the above is actually DNA, since it has T's. So we assume that the T's are actually U's.
 
-3' UGAACAGUACCAUUGAGGCAGCAUGGUCAUCCAGUAC 5'
-%ACUUGUCAUGGUAACUCCGUCGUACCAGUAGGUCAUG
+So in RNA we have: ACUUGUCAUGGUAACUCCGUCGUACCAGUAGGUCAUG
 
-We translate it 5' $\rightarrow$ 3', so we need to flip it.
+We then look for the start codon (Met) which is AUG. So we get:
 
-CAUGACCUACUGGUACGACGGAGUUACCAUGACAAGU
+ACUUGUC AUG GUA ACU CCG UCG UAC CAG UAG GUC AUG
 
-The start codon is AUG (Met), so the 5' UTR is everything left of this: which in this case is just C
+The 5' UTR is everything left of the first AUG which is: ACUUGUC.
+The stop codons are either UAA, UAG, or UGA. 
+We see UAG, so the 3' UTR is everything right of this: GUCAUG
 
-We then translate,
-AUGGUCAUCCAGUAC $\rightarrow$ MET, THR, TYR, TRP, TYR, ASP, GLY, VAL, THR, MET, THR, SER
+Thus our coding region is:
 
-We don't have a stop codon. So there is no UTR on the 3' end, and translation stops by hitting the end of the sequence.
+AUG GUA ACU CCG UCG UAC CAG UAG $\rightarrow$ MET VAL THR PRO SER TYR GLN Stop
 
 \end{document}
