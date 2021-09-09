@@ -2,6 +2,11 @@
 \usepackage{../EllioStyle}
 \usepackage{listings}
 
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
 \title{Homework 1}
 \author{Elliott Pryor}
 \date{7 September 2021}
@@ -60,5 +65,67 @@ They were run in a python shell and imported the python file that I made for con
 \end{figure}
 
 I also did the bonus, which runs via the command line. Here is an example below showing functionality.
+
+My example FASTA input:
+\begin{verbatim}
+>seq0, example file from 
+    http://prodata.swmed.edu/promals/info/fasta_format_file_example.htm 
+    with last sequence modified
+FQTWEEFSRAAEKLYLADPMKVRVVLKYRHVDGNLCIKVTDDLVCLVYRTDQAQDVKKIEKF
+>seq1
+KYRTWEEFTRAAEKLYQADPMKVRVVLKYRHCDGNLCIKVTDDVVCLLYRTDQAQDVKKIEKFHSQLMRLME 
+    LKVTDNKECLKFKTDQAQEAKKMEKLNNIFFTLM
+>seq2
+    EEYQTWEEFARAAEKLYLTDPMKVRVVLKYRHCDGNLCMKVTDDAVCLQYKTDQAQDVKKVEKLHGK
+>seq3
+MYQVWEEFSRAVEKLYLTDPMKVRVVLKYRHCDGNLCIKVTDNSVCLQYKTDQAQDVK
+>seq4
+EEFSRAVEKLYLTDPMKVRVVLKYRHCDGNLCIKVTDNSVVSYEMRLFGVQKDNFALEHSLL
+>seq5
+SWEEFAKAAEVLYLEDPMKCRMCTKYRHVDHKLVVKLTDNHTVLKYVTDMAQDVKKIEKLTTLLMR
+>seq6
+FTNWEEFAKAAERLHSANPEKCRFVTKYNHTKGELVLKLTDDVVCLQYSTNQLQDVKKLEKLSSTLLRSI
+>seq7
+SWEEFVERSVQLFRGDPNATRYVMKYRHCEGKLVLKVTDDRECLKFKTDQAQDAKKMEKLNNIFF
+>seq8
+SWDEFVDRSVQLFRADPESTRYVMKYRHCDGKLVLKVTDNKECLKFKTDQAQEAKKMEKLNNIFFTLM
+>seq9
+KNWEDFEIAAENMYMANPQNCRYTMKYVHSKGHILLKMSDNVKCVQYRAENMPDLKK
+>seq10
+THISISABSOLUTGIBBRISHJUSTTOSHOWITSOUTPUTBUTNOMATCH      
+\end{verbatim}
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = \textwidth]{fasta.png}
+    \caption{Program output on example Fasta input}
+    
+\end{figure}
+
+\newpage
+
+
+\lstdefinestyle{mystyle}{
+%    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+\lstinputlisting[language=Python]{z_algorithm.py}
+
 
 \end{document}

@@ -98,6 +98,7 @@ def analyze_fasta(pattern, filepath):
         if line.startswith('>'):
             if started:
                 z = z_pattern_match(pattern, text.replace('\n', ''))
+                text = ''
                 print_output(z)
             started = True
             print(f"Analyzing Sequence: {line.replace('>', '').strip()}")
