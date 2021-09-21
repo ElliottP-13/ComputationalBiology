@@ -3,6 +3,7 @@ import numpy as np
 
 
 def delta(c1, c2):
+    # Helper function used for scoring
     if c1 == c2:
         return 2
     else:
@@ -10,37 +11,39 @@ def delta(c1, c2):
 
 
 def construct_alignment(P, S, T, i=-1, j=-1, out_S='', out_T=''):
+    # Reconstruct the optimal alignment from the output of needleman(S,T)
     if i == -1 and j == -1:
         i, j = len(S), len(T)
 
-    if i == 0 and j == 0:
-        print('*' * 80)
+    if i == 0 and j == 0:  # base case
+        print('*' * 80)  # print out the optimal alignment
         print(out_S)
         print(out_T)
+        return out_S, out_T
 
+    retS, retT = '', ''
     moves = P[i][j]
     for move in moves:
-        if move == 0:
+        if move == 0:  # is just a part of the output of P, due to its construction. So skip move
             continue
-        elif move == 1:
+        elif move == 1:  # diagonal
             out_S = S[i - 1] + out_S
             out_T = T[j - 1] + out_T
             i = i -1
             j = j -1
-        elif move == 2:
+        elif move == 2:  # delete
             out_S = S[i - 1] + out_S
             out_T = '_' + out_T
             i = i - 1
             j = j
-        elif move == 3:
+        elif move == 3:  # insert
             out_S = '_' + out_S
             out_T = T[j-1] + out_T
             i = i
             j = j - 1
-        construct_alignment(P, S, T, i, j, out_S, out_T)  # recur
+        retS, retT = construct_alignment(P, S, T, i, j, out_S, out_T)  # recur
 
-
-    return out_S, out_T
+    return retS, retT  # return the last optimal alignment
 
 
 def needleman(S, T):
@@ -76,7 +79,6 @@ def needleman(S, T):
     return V, P
 
 
-
 def read_fasta(filepath):
     """
     Returns a dict key=sequence_name, value=sequence from the fasta file
@@ -89,7 +91,7 @@ def read_fasta(filepath):
     header = ''
     text = ''
     sequences = {}
-    for line in file:
+    for line in file:  # reads in fasta file. Allows for sequence to continue on multiple lines
         if line.startswith('>'):
             if started:
                 sequences[header] = line.replace('\n', '')
@@ -98,24 +100,32 @@ def read_fasta(filepath):
             header = line.replace('>', '').strip()
         else:
             text += line.strip()
-    sequences[header] = line.replace('\n', '')
+    sequences[header] = text.replace('\n', '')
     return sequences
 
 
 if __name__ == '__main__':
-    if len(sys.argv) == 3:
+    if len(sys.argv) == 2:
         # run fasta file
         # expect arguments z_algorithm.py <path to file>
         filepath = sys.argv[1]
-        read_fasta(filepath)
+        seq = read_fasta(filepath)
+        vals = list(seq.values())
+        keys = list(seq.keys())
+        print(f"Computing alignment between S={keys[0]} and T={keys[1]}")
+        V, P = needleman(vals[0], vals[1])
+        print(f"Optimal Score: {V[-1,-1]}")
+        s, t = construct_alignment(P, vals[0], vals[1])
     else:
         V, P = needleman('cat', 'taat')
         print('*' * 80)
         print(V)
         print()
         print(P)
+        print(f"Optimal Score: {V[-1, -1]}")
         print('*' * 80)
 
         s, t = construct_alignment(P, 'cat', 'taat')
-
+        print(s)
+        print(t)
         pass
