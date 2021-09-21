@@ -1,0 +1,84 @@
+\documentclass[11pt]{article}
+\usepackage{../EllioStyle}
+\usepackage{listings}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+%    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\title{Homework 2}
+\author{Elliott Pryor}
+\date{7 September 2021}
+
+\rhead{Homework 2}
+
+\begin{document}
+\maketitle
+
+\problem{1}
+
+Propose a dynamic programming algorithm to solve longest common substring problem
+\hrule
+
+
+
+\problem{2}
+Given two sequences S, T (not necessarily the same length), let G, L, H be the scores of the
+optimal global alignment, optimal local alignment, and optimal global alignment without penalizing leading or trailing spaces.
+
+
+\begin{enumerate}[a)]
+    \item Give an example of S, T so that the three scores are different
+    \item Prove or disprove the statement $L \geq H \geq G$
+\end{enumerate}
+
+
+\problem{3}
+
+Implement the global alignment algorithm from class.  Your program should read in a FASTA file (see HW1).  You can assume that the file just contains two sequences, e.g.
+
+> seq1
+ACTGGGAAA
+> seq2
+CTGGAACA
+
+The filename should be supplied as a command-line parameter.
+
+Align the first string with the second string.  Print out one optimal alignment.
+
+You can assume a simplified scoring function delta that has the following form:
+delta(match) = 2
+delta(mismatch) = -1
+delta(insertion/deletion) = -1
+
+Demonstrate your algorithms on two test cases (use screen shots to show runs). 
+
+\hrule
+
+
+
+\lstset{style=mystyle}
+\lstinputlisting[language=Python]{EditDistance.py}
+
+
+\end{document}
