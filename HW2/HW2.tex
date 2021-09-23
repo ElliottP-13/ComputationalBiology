@@ -97,6 +97,33 @@ optimal global alignment, optimal local alignment, and optimal global alignment 
 
 \hrule
 
+\begin{enumerate}[a)]
+    \item S = aaatata, T = tatc
+    G = 2, L = 6, H = 5
+
+    \item It is correct.
+    \begin{proof}
+        We first prove $L \geq H$ by contradiction.
+        Suppose not, then $L < H$. 
+        Given some global alignment $S, T = H$ (S, T) are globally aligned strings. 
+        Let $a$ be the first non-space character in $T$, and $b$ be the last non-space character in $T$.
+        Similarly, let $c$ be the first non-space character in $S$, and $d$ be the last non-space character in $S$.
+        Then construct substrings $S' = S[a .. b], T' = T[c .. d]$.
+        Then the alignment of $S', T' = H$. Since leading and trailing spaces
+        are not penalized in $H$, $S', T'$  consist of only the characters that are scored in $H$.
+        Since $S', T'$ are valid substrings, we have a contradiction. 
+
+        Now we prove $H \geq G$ by contradiction.
+        We assume that $H < G$. Since $G$ is the optimal global alignment.
+        We can choose an alignment for H to be the same as this global alignment. 
+        Then clearly $H \geq G$, since if $G$ has no leading or trailing spaces $H = G$.
+        Thus a contradiction.
+
+        Therefore $L \geq H \geq G$
+    \end{proof}
+
+\end{enumerate}
+
 
 \problem{3}
 
