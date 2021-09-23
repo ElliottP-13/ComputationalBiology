@@ -58,7 +58,6 @@ def needleman(S, T):
     P[0, 0] = 0  # reset 0, 0
 
     P = [[[x] for x in row] for row in P ]  # convert to list of lists
-    print(P)
     for r in range(1, len(V)):  # 2nd row onwards
         for c in range(1, len(V[r])):  # 2nd col onwards
 
@@ -94,7 +93,7 @@ def read_fasta(filepath):
     for line in file:  # reads in fasta file. Allows for sequence to continue on multiple lines
         if line.startswith('>'):
             if started:
-                sequences[header] = line.replace('\n', '')
+                sequences[header] = text.replace('\n', '')
                 text = ''
             started = True
             header = line.replace('>', '').strip()
@@ -115,17 +114,11 @@ if __name__ == '__main__':
         print(f"Computing alignment between S={keys[0]} and T={keys[1]}")
         V, P = needleman(vals[0], vals[1])
         print(f"Optimal Score: {V[-1,-1]}")
+        print(V)
         s, t = construct_alignment(P, vals[0], vals[1])
     else:
         V, P = needleman('cat', 'taat')
-        print('*' * 80)
-        print(V)
-        print()
-        print(P)
         print(f"Optimal Score: {V[-1, -1]}")
-        print('*' * 80)
-
+        print(V)
         s, t = construct_alignment(P, 'cat', 'taat')
-        print(s)
-        print(t)
         pass

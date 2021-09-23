@@ -129,9 +129,9 @@ optimal global alignment, optimal local alignment, and optimal global alignment 
 
 Implement the global alignment algorithm from class.  Your program should read in a FASTA file (see HW1).  You can assume that the file just contains two sequences, e.g.
 
-> seq1
-ACTGGGAAA
-> seq2
+$>$ seq1\\
+ACTGGGAAA\\
+$>$ seq2\\
 CTGGAACA
 
 The filename should be supplied as a command-line parameter.
@@ -147,7 +147,26 @@ Demonstrate your algorithms on two test cases (use screen shots to show runs).
 
 \hrule
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.55 \linewidth]{./example1.png}
+    \label{fig1}
+    \caption{Example 1, using cat and taat from class}
+\end{figure}
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.55 \linewidth]{./example2.png}
+    \label{fig2}
+    \caption{Example 2, using input from the homework description}
+\end{figure}
+
+I did the bonus and we can see that it prints all optimal alignments. 
+It produces duplicated results because I don't use a set,
+and the first move can take 2 paths and produce the same path.
+Consider example 1 from class. We can go (0,0) $\rightarrow$ (0,1) $\rightarrow$ (2,1)
+or (0,0) $\rightarrow$ (1,1) $\rightarrow$ (2,1). Both just add a space to the front of cat.
+So they are indeed 2 different paths with the same `phenotype'. 
 
 \lstset{style=mystyle}
 \lstinputlisting[language=Python]{EditDistance.py}
