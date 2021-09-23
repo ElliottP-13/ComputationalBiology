@@ -40,6 +40,49 @@
 Propose a dynamic programming algorithm to solve longest common substring problem
 \hrule
 
+This is almost identical to the Edit Distance algorithm.
+
+We create $V = nxm$ matrix. We set $V_{0,0} = 0$, and $V_{i,0} = 0, V_{0,j} = 0$ because the longest common subsequence
+is at least 0 (by matching no characters together).
+
+We then let $V_{i,j} = \begin{cases}
+    V_{i-1, j-1} + 1 & \text{if } S[i] = T[j]\\
+    \max(V_{i, j-1}, V_{i-1, j}) & \text{otherwise}
+\end{cases}$ for $i,j \neq 0$.
+The first case handles a match between two characters.
+The second case skips a character (because subsequence can be non-consecutive).
+
+The length of the longest common substring is $V_{n,m}$.
+
+We can also construct the alignment of the common subsequence in the same way as in Needleman-Wunch.
+
+
+\begin{proof}
+    Correctness.
+    
+    By induction, we show that $V_{i,j}$ is LCS (longest common substring) of $S[1..i]$ and $T[1..j]$.
+    For $i, j = 0$ this is trivially true by matching empty strings.
+    
+    % Assume that $S[i] = T[j]$. Then the characters match. So the length of the LCS is $1 + $ previous length.
+    % By inductive assumption we assume that $V_{i-1, j-1}$ is the LCS for $S[1 .. i-1]$, $T[1 .. j-1]$.
+    % Then we can match one more character. $V_{i,j} = 1 + V_{i-1, j-1}$.
+    
+    % Then assume that $S[i] \neq T[j]$. 
+    We assume that $V_{i-1, j-1}, V_{i, j-1}, V_{i-1, j}$ are the LCS for their respective substrings.
+    Suppose $V_{i,j}$ is not the length of longest common subsequence.
+    Assume $S[i] = T[j]$. Then $V_{i,j} = 1 +  V_{i-1, j-1}$. 
+    Then, either we shouldn't match $S[i], T[j]$ which we can get a longer LCS at no consequence by matching them.
+    Or $V_{i-1, j-1}$ is not an LCS. A contradiction in both cases.
+
+    Then assume $S[i] \neq T[j]$. If we match against $V_{i-1, j-1}$ we break the substring since they don't match.
+    So we want to skip one letter of the string. If we skip a letter in $S$ then we choose $V_{i-1, j}$.
+    Suppose there is a more optimal choice. Then, we shouldn't have skipped a letter in S (and instead in T), which is handled
+    by the other case of the $\max$. Or $V_{i-1, j}$ is not optimal, which is a contradiction.
+    The same holds in reverse for choosing to skip a letter in T. 
+
+    Thus inductive step holds by contradiction in all cases.
+
+\end{proof}
 
 
 \problem{2}
@@ -51,6 +94,8 @@ optimal global alignment, optimal local alignment, and optimal global alignment 
     \item Give an example of S, T so that the three scores are different
     \item Prove or disprove the statement $L \geq H \geq G$
 \end{enumerate}
+
+\hrule
 
 
 \problem{3}
