@@ -95,3 +95,5 @@ docs/
 
 # translation temp files
 po/*~
+
+*/__pycache__/
