@@ -1,0 +1,423 @@
+\documentclass[11pt]{article}
+\usepackage{../EllioStyle}
+\usepackage{listings}
+\usepackage{multicol}
+\usepackage{forest}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+%    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\title{Homework 5}
+\author{Elliott Pryor}
+\date{2 December 2021}
+
+\rhead{Homework 5}
+
+\begin{document}
+\maketitle
+
+\problem{1}
+Problem 1 (15 pts) 551 presentation questions: Answer any three of the following questions (551 presentation slides are posted on google drive)
+
+[Adiesha/Reese] linear time suffix array construction:
+
+Find the type of each character in the given string mountainsandmind\$. Find the LMS character positions using the type and then find the LMS substrings. 
+
+[Jordan/Andrew] Knuth-Morris-Pratt pattern matching:
+
+Saving information about \rule{2cm}{0.15mm} allows the KMP algorithm to avoid needless repetition and thus reduce the time complexity from quadratic (for the naive algorithm) to linear. 
+
+[Joshua Ryan/Susan] Farach’s suffix tree construction:
+
+Follow Farach’s algorithm on the string S = acagaca\$. Create the even tree, odd tree, and then the merged tree. For an extra challenge, circle the overmerged nodes.
+
+[Ian/Elliott] RNA sequencing with network flows:
+
+When using a flow network to determine RNA sequences what does a node in the flow network represent?
+\begin{enumerate}[a)]
+    \item a connection between two segments of RNA
+    \item a segment of RNA
+    \item the DNA that an RNA segment was transcribed from
+    \item the protein that gets translated from an RNA segment
+\end{enumerate}
+
+
+\hrule
+
+\begin{enumerate}[(1)]
+    \item Adiesha / Reese
+    
+\begin{verbatim}
+         00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16
+    S =   M  O  U  N  T  A  I  N  S  A  N  D  M  I  N  D  $
+      =   S  S  L  S  L  S  S  S  L  S  L  S  L  S  L  L  S
+          *        *     *           *     *     *        *
+\end{verbatim}
+
+Substrings:
+\begin{verbatim}
+    00 - SSLS
+    03 - SLS
+    05 - SSSLS
+    09 - SLS
+    11 - SLS
+    13 - SLLS$
+    16 - $
+\end{verbatim}
+
+\item Jordan / Andrew: the query string. 
+This is the Q array from class. It stores the length of the biggest prefix at $i$ in query string.
+It means we don't have to start over after matching, we can skip some.
+
+\item Elliott / Ian: B
+
+\end{enumerate}
+
+\problem{2}
+Fitch’s algorithm: For the following five sequences, first build a binary tree where the sequences are the leaves 
+(you can just guess the tree topology that you think leads to a good score).  
+Then apply Fitch’s algorithm to predict the ancestral sequences at each internal node in the tree.
+
+\begin{verbatim}
+    S1 = acctt  S2 = tcggc  S3 = tactt  S4 = atcgt  S5 = acata    
+\end{verbatim}
+
+\hrule
+
+\begin{center}
+    \begin{forest}
+        for tree={
+            if n children=0{
+            font=\itshape,
+            tier=terminal,
+            }{},
+        }
+        [.
+            [tcggc]
+            [.
+                [atcgt]
+                [.
+                        [acata]
+                        [.
+                            [acctt]
+                            [tactt]
+                        ]
+                    ]
+            ]
+        ]
+        \end{forest}
+\end{center}
+
+
+% letter 1
+\begin{center}
+    \begin{forest}
+        for tree={
+            if n children=0{
+            font=\itshape,
+            tier=terminal,
+            }{},
+        }
+        [, phantom, s sep = 1cm
+        [.
+            [t]
+            [.
+                [a]
+                [.
+                    [a]
+                    [.
+                        [a]
+                        [t]
+                    ]
+                ]
+            ]
+        ]
+        [{\{a, t\}}
+            [t]
+            [{\{a\}}
+                [a]
+                [{\{a\}}
+                    [a]
+                    [{\{a, t\}}
+                        [a]
+                        [t]
+                    ]
+                ]
+            ]
+        ]
+        [t
+            [t]
+            [a
+                [a]
+                [a
+                    [a]
+                    [a
+                        [a]
+                        [t]
+                    ]
+                ]
+            ]
+        ]
+        ]
+    \end{forest}
+\end{center}
+
+% letter 2
+\begin{center}
+    \begin{forest}
+        for tree={
+            if n children=0{
+            font=\itshape,
+            tier=terminal,
+            }{},
+        }
+        [, phantom, s sep = 1cm
+        [.
+            [c]
+            [.
+                [t]
+                [.
+                    [c]
+                    [.
+                        [c]
+                        [a]
+                    ]
+                ]
+            ]
+        ]
+        [{\{c\}}
+            [c]
+            [{\{c, t\}}
+                [t]
+                [{\{c\}}
+                    [c]
+                    [{\{c, a\}}
+                        [c]
+                        [a]
+                    ]
+                ]
+            ]
+        ]
+        [c
+            [c]
+            [c
+                [t]
+                [c
+                    [c]
+                    [c
+                        [c]
+                        [a]
+                    ]
+                ]
+            ]
+        ]
+        ]
+    \end{forest}
+\end{center}
+
+% Letter 3
+\begin{center}
+    \begin{forest}
+        for tree={
+            if n children=0{
+            font=\itshape,
+            tier=terminal,
+            }{},
+        }
+        [, phantom, s sep = 1cm
+        [.
+            [g]
+            [.
+                [c]
+                [.
+                    [a]
+                    [.
+                        [c]
+                        [c]
+                    ]
+                ]
+            ]
+        ]
+        [{\{g, c\}}
+            [g]
+            [{\{c\}}
+                [c]
+                [{\{a, c\}}
+                    [a]
+                    [{\{c\}}
+                        [c]
+                        [c]
+                    ]
+                ]
+            ]
+        ]
+        [g
+            [g]
+            [c
+                [c]
+                [c
+                    [a]
+                    [c
+                        [c]
+                        [c]
+                    ]
+                ]
+            ]
+        ]
+        ]
+    \end{forest}
+\end{center}
+
+% letter 4
+\begin{center}
+    \begin{forest}
+        for tree={
+            if n children=0{
+            font=\itshape,
+            tier=terminal,
+            }{},
+        }
+        [, phantom, s sep = 1cm
+        [.
+            [g]
+            [.
+                [g]
+                [.
+                    [t]
+                    [.
+                        [t]
+                        [t]
+                    ]
+                ]
+            ]
+        ]
+        [{\{g\}}
+            [g]
+            [{\{t, g\}}
+                [g]
+                [{\{t\}}
+                    [t]
+                    [{\{t\}}
+                        [t]
+                        [t]
+                    ]
+                ]
+            ]
+        ]
+        [g
+            [g]
+            [t
+                [g]
+                [t
+                    [t]
+                    [t
+                        [t]
+                        [t]
+                    ]
+                ]
+            ]
+        ]
+        ]
+    \end{forest}
+\end{center}
+
+% Letter 5
+\begin{center}
+    \begin{forest}
+        for tree={
+            if n children=0{
+            font=\itshape,
+            tier=terminal,
+            }{},
+        }
+        [, phantom, s sep = 1cm
+        [.
+            [c]
+            [.
+                [t]
+                [.
+                    [a]
+                    [.
+                        [t]
+                        [t]
+                    ]
+                ]
+            ]
+        ]
+        [{\{c, t\}}
+            [c]
+            [{\{t\}}
+                [t]
+                [{\{t, a\}}
+                    [a]
+                    [{\{t\}}
+                        [t]
+                        [t]
+                    ]
+                ]
+            ]
+        ]
+        [t
+            [c]
+            [t
+                [t]
+                [a
+                    [a]
+                    [t
+                        [t]
+                        [t]
+                    ]
+                ]
+            ]
+        ]
+        ]
+    \end{forest}
+\end{center}
+
+\begin{center}
+    \begin{forest}
+        for tree={
+            if n children=0{
+            font=\itshape,
+            tier=terminal,
+            }{},
+        }
+        [tcggt
+            [tcggc]
+            [acctt
+                [atcgt]
+                [accta
+                        [acata]
+                        [acctt
+                            [acctt]
+                            [tactt]
+                        ]
+                    ]
+            ]
+        ]
+    \end{forest}
+\end{center}
+
+
+\end{document}
