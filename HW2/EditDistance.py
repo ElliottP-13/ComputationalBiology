@@ -5,7 +5,7 @@ import numpy as np
 def delta(c1, c2):
     # Helper function used for scoring
     if c1 == c2:
-        return 2
+        return 0
     else:
         return -1
 
@@ -117,8 +117,8 @@ if __name__ == '__main__':
         print(V)
         s, t = construct_alignment(P, vals[0], vals[1])
     else:
-        V, P = needleman('cat', 'taat')
+        V, P = needleman('ACTCTCGATC', 'ACTTCGATC')
         print(f"Optimal Score: {V[-1, -1]}")
         print(V)
-        s, t = construct_alignment(P, 'cat', 'taat')
+        s, t = construct_alignment(P, 'ACTCTCGATC', 'ACTTCGATC')
         pass

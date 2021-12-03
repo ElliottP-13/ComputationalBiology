@@ -13,8 +13,6 @@ def generalized_needleman(strings, f, compute_path=True):
 
     k = len(strings)
 
-    # for each possible b combination
-
     for idx in np.ndindex(V.shape):
         if sum(idx) == 0:  # skip V[0]
             continue
@@ -28,10 +26,10 @@ def generalized_needleman(strings, f, compute_path=True):
             jdx = idx - b
 
             if np.any(jdx < 0):  # recurrence relation i_j = 0 --> b_j = 0
-                continue
+                continue  # we can skip if we hit this case (will be covered by other b)
 
             jdx = tuple(jdx)  # to be able to index into V or P
-            pdx = np.multiply(idx, b)
+            pdx = np.multiply(idx, b)  # element-wise multiplication
 
             v = V[jdx] + SP([strings[m][pdx[m]] for m in range(len(strings))])
             if v < vopt:
@@ -40,12 +38,12 @@ def generalized_needleman(strings, f, compute_path=True):
 
         V[idx] = vopt
         if compute_path:
-            P[idx] = iopt
+            P[idx] = iopt  # less memory to store i than b
     return V[tuple(x - 1 for x in V.shape)]
 
 
 if __name__ == "__main__":
-    s = ['_worldhelllllo', '_helllllo']
+    s = ['ACTCTCGATC', 'ACTTCGATC', 'ACTCTCTATC', 'ACTCTCTAATC']
     q = np.array(s)
 
     print(f' ANSWER: {generalized_needleman(s, delta)}')
