@@ -1,5 +1,6 @@
 from EditDistance import *
 import numpy as np
+from Utils import *
 
 class CenterStar:
     def __init__(self, f=delta):
@@ -119,6 +120,7 @@ if __name__ == "__main__":
         c = CenterStar()
         print(c.center_star(['ACTCTCGATC', 'ACTTCGATC', 'ACTCTCTATC', 'ACTCTCTAATC']))
         print(c.center_star(['bananan', 'bann', 'aannnana', 'ananana', 'bananan']))
-        msa = c.MSA(['bananan', 'bann', 'aannnana', 'ananana', 'bananan'])
+        msa = c.MSA(['ACTCTCGATC', 'ACTTCGATC', 'ACTCTCTATC', 'ACTCTCTAATC'])
         for s in msa:
             print(s)
+        print(f' ANSWER: {SP_alignment(msa)}')

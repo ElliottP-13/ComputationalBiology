@@ -1,16 +1,9 @@
 import sys
 import numpy as np
+from Utils import *
 
 # This is copied from HW2 with some tweaks to make it easier for Center_Star
 # Please look at HW2 for the complete implementation
-
-
-def delta(c1, c2):
-    # Helper function used for scoring
-    if c1 == c2:
-        return 0
-    else:
-        return 1
 
 
 def construct_alignment(P, S, T, i=-1, j=-1, out_S='', out_T=''):

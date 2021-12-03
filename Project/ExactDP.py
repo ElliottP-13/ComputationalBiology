@@ -1,15 +1,6 @@
 import numpy as np
 from EditDistance import *
-
-
-def SP(chars):
-    total = 0
-    for i in range(len(chars) - 1):
-        for j in range(i + 1, len(chars)):
-            total += delta(chars[i], chars[j])
-
-    assert sum([delta(chars[i], chars[j]) for i in range(len(chars) - 1) for j in range(i+1, len(chars))]) == total
-    return total
+from Utils import *
 
 
 def generalized_needleman(strings, f, compute_path=True):
@@ -40,8 +31,9 @@ def generalized_needleman(strings, f, compute_path=True):
                 continue
 
             jdx = tuple(jdx)  # to be able to index into V or P
+            pdx = np.multiply(idx, b)
 
-            v = V[jdx] + SP([strings[m][jdx[m]] for m in range(len(strings))])
+            v = V[jdx] + SP([strings[m][pdx[m]] for m in range(len(strings))])
             if v < vopt:
                 vopt = v
                 iopt = i
@@ -53,7 +45,7 @@ def generalized_needleman(strings, f, compute_path=True):
 
 
 if __name__ == "__main__":
-    s = ['ACTCTCGATC', 'ACTTCGATC', 'ACTCTCTATC', 'ACTCTCTAATC']
+    s = ['_worldhelllllo', '_helllllo']
     q = np.array(s)
 
     print(f' ANSWER: {generalized_needleman(s, delta)}')
