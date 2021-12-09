@@ -2,14 +2,15 @@ import sys
 import numpy as np
 from Utils import *
 
+
 # This is copied from HW2 with some tweaks to make it easier for Center_Star
 # Please look at HW2 for the complete implementation
 
 
-def construct_alignment(P, S, T, i=-1, j=-1, blank_s=None, blank_t=None):
+def construct_alignment(P, i=-1, j=-1, blank_s=None, blank_t=None):
     # Reconstruct the optimal alignment from the output of needleman(S,T)
     if i == -1 and j == -1:
-        i, j = len(S), len(T)
+        i, j = len(P) - 1, len(P[0]) - 1
 
     if i == 0 and j == 0:  # base case
         # print('*' * 80)  # print out the optimal alignment
@@ -23,8 +24,8 @@ def construct_alignment(P, S, T, i=-1, j=-1, blank_s=None, blank_t=None):
         blank_t = []
 
     if move == 1:  # diagonal
-        i = i -1
-        j = j -1
+        i = i - 1
+        j = j - 1
     elif move == 2:  # delete
         blank_t.append(j)
         i = i - 1
@@ -34,12 +35,12 @@ def construct_alignment(P, S, T, i=-1, j=-1, blank_s=None, blank_t=None):
         i = i
         j = j - 1
 
-    blank_s, blank_t = construct_alignment(P, S, T, i, j, blank_s, blank_t)  # recur
+    blank_s, blank_t = construct_alignment(P, i, j, blank_s, blank_t)  # recur
 
     return blank_s, blank_t  # return the last optimal alignment
 
 
-def needleman(S, T, f=delta):
+def needleman(S, T, f=delta, MSA=False):
     """
     Compute the edit distance between two strings using Needleman-Wunch Alg
     :param S: First String
@@ -59,10 +60,14 @@ def needleman(S, T, f=delta):
 
     for r in range(1, len(V)):  # 2nd row onwards
         for c in range(1, len(V[r])):  # 2nd col onwards
-
-            replace = V[r-1, c-1] + f(S[r-1], T[c-1])
-            delete = V[r-1, c] + f(S[r-1], '_')
-            insert = V[r, c - 1] + f('_', T[c-1])
+            if not MSA:
+                replace = V[r - 1, c - 1] + f(S[r - 1], T[c - 1])
+                delete = V[r - 1, c] + f(S[r - 1], '_')
+                insert = V[r, c - 1] + f('_', T[c - 1])
+            else:
+                replace = V[r - 1, c - 1] + f(r-1, c-1)
+                delete = V[r - 1, c] + f(r-1, len(V[r])-1)
+                insert = V[r, c - 1] + f(len(V)-1, c - 1)
 
             arr = np.array([replace, delete, insert])
 
@@ -78,11 +83,11 @@ def needleman(S, T, f=delta):
 
 
 if __name__ == '__main__':
-    S, T = 'ACTGGGAAA','CTGGAACA'
+    S, T = 'agct','agcat'
     V, P = needleman(S, T)
     print(f"Optimal Score: {V[-1, -1]}")
     print(V)
-    blank_s, blank_t = construct_alignment(P, S, T)
+    blank_s, blank_t = construct_alignment(P)
     blank_s.reverse()
     blank_t.reverse()
 

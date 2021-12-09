@@ -1,3 +1,5 @@
+import collections
+
 import networkx as nx
 import numpy as np
 import matplotlib.pyplot as plt
@@ -42,7 +44,6 @@ def neighbor_join(D, T=None, m=None):
             s1 = np.sum(D[i][:])
             s2 = np.sum(D[j][:])
             Q[i][j] = (len(D) - 2) * D[i][j] - s1 - s2
-    print(Q)
     np.fill_diagonal(Q, np.infty)
     # Step 2 find pair with smallest value to join into u
     idx = np.argmin(Q)  # index into flat array
@@ -95,13 +96,93 @@ def neighbor_join(D, T=None, m=None):
     return neighbor_join(Dnew, T, m[:-2])
 
 
-def clustalW(strings):
+def make_delta_fn(S, T, f=delta):
+    # get list of dicts. list[i] = dict{char: frequency in column}
+    s_char = [collections.Counter([st[i] for st in S]) for i in range(len(S[0]))]
+    s_char.append({'_': 1})
+    t_char = [collections.Counter([tt[i] for tt in T]) for i in range(len(T[0]))]
+    t_char.append({'_': 1})
+
+    def g(i, j):
+        total = 0
+        for x in s_char[i].keys():
+            for y in t_char[j].keys():
+                total += s_char[i][x] * t_char[j][y] * f(x, y)
+        return total
+
+    return g
+
+
+def merge_on_tree(strings, T, node_str=None):
+    if node_str is None:
+        node_str = {}
+        for i in range(len(strings)):
+            node_str[i + 1] = [strings[i]]  # stores in mapping
+
+    leaves = [x for x in T.nodes() if T.degree(x) == 1]  # get all the leaf nodes
+    one_parent = {}  # temp holding list
+    parents = []
+    for child in leaves:
+        edge = list(T.edges(child))[0]
+        if edge[1] not in one_parent:
+            one_parent[edge[1]] = child
+        else:  # add it to the list if there are 2 children with this parent
+            c2 = one_parent.pop(edge[1])  # get parent and 2nd child
+            parents.append((edge[1], child, c2))  # (parent, child 1 , child 2)
+
+    if len(parents) == 0:
+        return node_str[0]
+
+    for p, c1, c2 in parents:
+        A = node_str[c1]
+        B = node_str[c2]
+
+        f = make_delta_fn(A, B)
+        V, P = needleman(A[0], B[0], f, True)  # assume everything in A, B is same length respectively
+
+        blank_s, blank_t = construct_alignment(P)
+        blank_s.reverse()
+        blank_t.reverse()  # go backwards so don't mess up index
+
+        insert = lambda char, i, string: string[:i] + char + string[i:]
+        retS = A.copy()
+        retT = B.copy()
+
+        # add the blanks
+        for k in range(len(retS)):
+            for i in blank_s:
+                retS[k] = insert('_', i, retS[k])
+        for k in range(len(retT)):
+            for i in blank_t:
+                retT[k] = insert('_', i, retT[k])
+
+        node_str[p] = retS + retT
+
+        # remove edges
+        T.remove_edge(c1, p)
+        T.remove_edge(c2, p)
+
+        # remove nodes
+        T.remove_node(c1)
+        T.remove_node(c2)
+
+    return merge_on_tree(strings, T, node_str)
+
+def clustalW(strings, draw=False):
     distance_matrix = compute_pairwise_distances(strings)
     T = neighbor_join(distance_matrix)
-    pos = nx.drawing.planar_layout(T)
-    nx.draw(T, pos=pos, with_labels=True)
-    plt.show()
+
+    if draw:
+        pos = nx.drawing.planar_layout(T)
+        nx.draw(T, pos=pos, with_labels=True)
+        plt.show()
+
+    MSA = merge_on_tree(strings, T)
+    return MSA
 
 
 if __name__ == '__main__':
-    clustalW(['actct','agcat','agct','acttg','ctct'])
+    msa = clustalW(['ACTCTCGATC', 'ACTTCGATC', 'ACTCTCTATC', 'ACTCTCTAATC'])
+    for s in msa:
+        print(s)
+    print(f' ANSWER: {SP_alignment(msa)}')
