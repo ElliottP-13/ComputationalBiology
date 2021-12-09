@@ -6,7 +6,7 @@ from Utils import *
 # Please look at HW2 for the complete implementation
 
 
-def construct_alignment(P, S, T, i=-1, j=-1, out_S='', out_T=''):
+def construct_alignment(P, S, T, i=-1, j=-1, blank_s=None, blank_t=None):
     # Reconstruct the optimal alignment from the output of needleman(S,T)
     if i == -1 and j == -1:
         i, j = len(S), len(T)
@@ -15,28 +15,28 @@ def construct_alignment(P, S, T, i=-1, j=-1, out_S='', out_T=''):
         # print('*' * 80)  # print out the optimal alignment
         # print(out_S)
         # print(out_T)
-        return out_S, out_T
+        return blank_s, blank_t
 
     move = P[i][j]
+    if blank_s is None or blank_t is None:
+        blank_s = []
+        blank_t = []
 
     if move == 1:  # diagonal
-        out_S = S[i - 1] + out_S
-        out_T = T[j - 1] + out_T
         i = i -1
         j = j -1
     elif move == 2:  # delete
-        out_S = S[i - 1] + out_S
-        out_T = '_' + out_T
+        blank_t.append(j)
         i = i - 1
         j = j
     elif move == 3:  # insert
-        out_S = '_' + out_S
-        out_T = T[j-1] + out_T
+        blank_s.append(i)
         i = i
         j = j - 1
-    retS, retT = construct_alignment(P, S, T, i, j, out_S, out_T)  # recur
 
-    return retS, retT  # return the last optimal alignment
+    blank_s, blank_t = construct_alignment(P, S, T, i, j, blank_s, blank_t)  # recur
+
+    return blank_s, blank_t  # return the last optimal alignment
 
 
 def needleman(S, T, f=delta):
@@ -78,9 +78,22 @@ def needleman(S, T, f=delta):
 
 
 if __name__ == '__main__':
-    V, P = needleman('ACTCTCGATC', 'ACTTCGATC')
+    S, T = 'ACTGGGAAA','CTGGAACA'
+    V, P = needleman(S, T)
     print(f"Optimal Score: {V[-1, -1]}")
     print(V)
-    s, t = construct_alignment(P, 'ACTCTCGATC', 'ACTTCGATC')
-    print(s)
-    print(t)
+    blank_s, blank_t = construct_alignment(P, S, T)
+    blank_s.reverse()
+    blank_t.reverse()
+
+    insert = lambda char, i, string: string[:i] + char + string[i:]
+    retS = S
+    retT = T
+    print(type(blank_s))
+    for i in blank_s:  # go backwards so don't mess up index
+        retS = insert('_', i, retS)
+    for i in blank_t:  # go backwards so don't mess up index
+        retT = insert('_', i, retT)
+
+    print(retS)
+    print(retT)
