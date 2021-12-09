@@ -17,27 +17,24 @@ def construct_alignment(P, S, T, i=-1, j=-1, out_S='', out_T=''):
         # print(out_T)
         return out_S, out_T
 
-    retS, retT = '', ''
-    moves = P[i][j]
-    for move in moves:
-        if move == 0:  # is just a part of the output of P, due to its construction. So skip move
-            continue
-        elif move == 1:  # diagonal
-            out_S = S[i - 1] + out_S
-            out_T = T[j - 1] + out_T
-            i = i -1
-            j = j -1
-        elif move == 2:  # delete
-            out_S = S[i - 1] + out_S
-            out_T = '_' + out_T
-            i = i - 1
-            j = j
-        elif move == 3:  # insert
-            out_S = '_' + out_S
-            out_T = T[j-1] + out_T
-            i = i
-            j = j - 1
-        retS, retT = construct_alignment(P, S, T, i, j, out_S, out_T)  # recur
+    move = P[i][j]
+
+    if move == 1:  # diagonal
+        out_S = S[i - 1] + out_S
+        out_T = T[j - 1] + out_T
+        i = i -1
+        j = j -1
+    elif move == 2:  # delete
+        out_S = S[i - 1] + out_S
+        out_T = '_' + out_T
+        i = i - 1
+        j = j
+    elif move == 3:  # insert
+        out_S = '_' + out_S
+        out_T = T[j-1] + out_T
+        i = i
+        j = j - 1
+    retS, retT = construct_alignment(P, S, T, i, j, out_S, out_T)  # recur
 
     return retS, retT  # return the last optimal alignment
 
@@ -60,7 +57,6 @@ def needleman(S, T, f=delta):
     P[0, :] = 3 * np.ones(len(T) + 1)  # horizontal case 1
     P[0, 0] = 0  # reset 0, 0
 
-    P = [[[x] for x in row] for row in P ]  # convert to list of lists
     for r in range(1, len(V)):  # 2nd row onwards
         for c in range(1, len(V[r])):  # 2nd col onwards
 
@@ -72,10 +68,19 @@ def needleman(S, T, f=delta):
 
             V[r, c] = min(arr)
             if replace == min(arr):
-                P[r][c].append(1)
+                P[r][c] = 1
             if delete == min(arr):
-                P[r][c].append(2)
+                P[r][c] = 2
             if insert == min(arr):
-                P[r][c].append(3)
+                P[r][c] = 3
 
     return V, P
+
+
+if __name__ == '__main__':
+    V, P = needleman('ACTCTCGATC', 'ACTTCGATC')
+    print(f"Optimal Score: {V[-1, -1]}")
+    print(V)
+    s, t = construct_alignment(P, 'ACTCTCGATC', 'ACTTCGATC')
+    print(s)
+    print(t)
