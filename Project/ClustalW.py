@@ -1,7 +1,5 @@
 import collections
-
 import networkx as nx
-import numpy as np
 import matplotlib.pyplot as plt
 
 from EditDistance import *
@@ -97,6 +95,15 @@ def neighbor_join(D, T=None, m=None):
 
 
 def make_delta_fn(S, T, f=delta):
+    """
+    Makes PSP Function
+    PSP(i,j) = sum_{x,y} g_x(i) g_y(j) delta(x, y)
+    where g_c(i) indicates frequency of char c in column i
+    :param S:
+    :param T:
+    :param f:
+    :return:
+    """
     # get list of dicts. list[i] = dict{char: frequency in column}
     s_char = [collections.Counter([st[i] for st in S]) for i in range(len(S[0]))]
     s_char.append({'_': 1})
@@ -114,6 +121,13 @@ def make_delta_fn(S, T, f=delta):
 
 
 def merge_on_tree(strings, T, node_str=None):
+    """
+    Merge the set of strings using the guide tree
+    :param strings: set of strings for MSA
+    :param T: guide tree
+    :param node_str: recursive dict mapping aligned sequence at each node
+    :return: MSA alignment
+    """
     if node_str is None:
         node_str = {}
         for i in range(len(strings)):
@@ -130,14 +144,14 @@ def merge_on_tree(strings, T, node_str=None):
             c2 = one_parent.pop(edge[1])  # get parent and 2nd child
             parents.append((edge[1], child, c2))  # (parent, child 1 , child 2)
 
-    if len(parents) == 0:
+    if len(parents) == 0:  # recursive case
         return node_str[0]
 
-    for p, c1, c2 in parents:
-        A = node_str[c1]
-        B = node_str[c2]
+    for p, c1, c2 in parents:  # for ones we can merge
+        A = node_str[c1]  # set of strings S
+        B = node_str[c2]  # set of strings T
 
-        f = make_delta_fn(A, B)
+        f = make_delta_fn(A, B)  # make PSP function
         V, P = needleman(A[0], B[0], f, True)  # assume everything in A, B is same length respectively
 
         blank_s, blank_t = construct_alignment(P)
@@ -168,6 +182,7 @@ def merge_on_tree(strings, T, node_str=None):
 
     return merge_on_tree(strings, T, node_str)
 
+
 def clustalW(strings, draw=False):
     distance_matrix = compute_pairwise_distances(strings)
     T = neighbor_join(distance_matrix)
@@ -186,3 +201,8 @@ if __name__ == '__main__':
     for s in msa:
         print(s)
     print(f' ANSWER: {SP_alignment(msa)}')
+    print(f" ONLINE ANSER: {SP_alignment(['ACTCTCTATC_', 'ACTCTCTAATC', 'ACTCTCGATC_', 'ACT_TCGATC_'])}")
+    """
+    'ACTCTCTATC_', 'ACTCTCTAATC', 'ACTCTCGATC_', 'ACT_TCGATC_'
+    """
+
