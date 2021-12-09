@@ -202,7 +202,10 @@ if __name__ == '__main__':
         print(s)
     print(f' ANSWER: {SP_alignment(msa)}')
     print(f" ONLINE ANSER: {SP_alignment(['ACTCTCTATC_', 'ACTCTCTAATC', 'ACTCTCGATC_', 'ACT_TCGATC_'])}")
+    print(f" OTHER ANSER: {SP_alignment(['ACTCTCT_ATC_', 'ACTCTCGA_TC_', 'ACTT_CGA_T_C', 'ACTCTCTA_ATC',])}")
+
+
     """
-    'ACTCTCTATC_', 'ACTCTCTAATC', 'ACTCTCGATC_', 'ACT_TCGATC_'
+ 'ACTCTCT-ATC-, 'ACTCTCGA-TC-, 'ACTT-CGA-T-C, 'ACTCTCTA-ATC, '
     """
 

@@ -29,7 +29,7 @@ def CS(s1,s2):
     return(value)
 
 def main():
-    Seq = ['actct','agcat','agct','acttg','ctct']
+    Seq = ['ACTCTCGATC', 'ACTTCGATC', 'ACTCTCTATC', 'ACTCTCTAATC']
 
     f_seq = []
     Score_Mat = []
@@ -85,11 +85,13 @@ def main():
                     else:
                         A1.append(Prog_Align(A1[vert.index(a[0])],A1[vert.index(a[1])]))
 
-
     for j in range(len(A1)):
         for i in range(len(A1[j])):
             print(A1[j][i])
         print('\n')
+
+    for s in A1[len(A1) - 1]:
+        print(f" \'{''.join(s)}, \'")
 
     print(phy_mat)
     print(vert)
