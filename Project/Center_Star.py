@@ -50,7 +50,21 @@ class CenterStar:
                 continue
 
             V, P = needleman(Sc, strings[i], self.f)
-            s2, t2 = construct_alignment(P, Sc, strings[i])
+
+            blank_s, blank_t = construct_alignment(P)
+            blank_s.reverse()
+            blank_t.reverse()
+
+            insert = lambda char, i, string: string[:i] + char + string[i:]
+            retS = Sc
+            retT = strings[i]
+            print(type(blank_s))
+            for j in blank_s:  # go backwards so don't mess up index
+                retS = insert('_', j, retS)
+            for j in blank_t:  # go backwards so don't mess up index
+                retT = insert('_', j, retT)
+
+            s2, t2 = retS, retT
             alignment[i] = t2
 
             add_spaces = self.compute_indx(Sc, s2)  # compute index where to add spaces
