@@ -58,7 +58,6 @@ class CenterStar:
             insert = lambda char, i, string: string[:i] + char + string[i:]
             retS = Sc
             retT = strings[i]
-            print(type(blank_s))
             for j in blank_s:  # go backwards so don't mess up index
                 retS = insert('_', j, retS)
             for j in blank_t:  # go backwards so don't mess up index

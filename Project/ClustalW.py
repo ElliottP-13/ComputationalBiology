@@ -183,8 +183,8 @@ def merge_on_tree(strings, T, node_str=None):
     return merge_on_tree(strings, T, node_str)
 
 
-def clustalW(strings, draw=False):
-    distance_matrix = compute_pairwise_distances(strings)
+def clustalW(strings, draw=False, f=delta):
+    distance_matrix = compute_pairwise_distances(strings, f=f)
     T = neighbor_join(distance_matrix)
 
     if draw:
