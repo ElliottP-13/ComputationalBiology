@@ -144,43 +144,53 @@ def merge_on_tree(strings, T, node_str=None):
             c2 = one_parent.pop(edge[1])  # get parent and 2nd child
             parents.append((edge[1], child, c2))  # (parent, child 1 , child 2)
 
-    if len(parents) == 0:  # recursive case
-        return node_str[0]
+    while len(parents) > 0:
+        for p, c1, c2 in parents:  # for ones we can merge
+            A = node_str[c1]  # set of strings S
+            B = node_str[c2]  # set of strings T
 
-    for p, c1, c2 in parents:  # for ones we can merge
-        A = node_str[c1]  # set of strings S
-        B = node_str[c2]  # set of strings T
+            f = make_delta_fn(A, B)  # make PSP function
+            V, P = needleman(A[0], B[0], f, True)  # assume everything in A, B is same length respectively
 
-        f = make_delta_fn(A, B)  # make PSP function
-        V, P = needleman(A[0], B[0], f, True)  # assume everything in A, B is same length respectively
+            blank_s, blank_t = construct_alignment(P)
+            blank_s.reverse()
+            blank_t.reverse()  # go backwards so don't mess up index
 
-        blank_s, blank_t = construct_alignment(P)
-        blank_s.reverse()
-        blank_t.reverse()  # go backwards so don't mess up index
+            insert = lambda char, i, string: string[:i] + char + string[i:]
+            retS = A.copy()
+            retT = B.copy()
 
-        insert = lambda char, i, string: string[:i] + char + string[i:]
-        retS = A.copy()
-        retT = B.copy()
+            # add the blanks
+            for k in range(len(retS)):
+                for i in blank_s:
+                    retS[k] = insert('_', i, retS[k])
+            for k in range(len(retT)):
+                for i in blank_t:
+                    retT[k] = insert('_', i, retT[k])
 
-        # add the blanks
-        for k in range(len(retS)):
-            for i in blank_s:
-                retS[k] = insert('_', i, retS[k])
-        for k in range(len(retT)):
-            for i in blank_t:
-                retT[k] = insert('_', i, retT[k])
+            node_str[p] = retS + retT
 
-        node_str[p] = retS + retT
+            # remove edges
+            T.remove_edge(c1, p)
+            T.remove_edge(c2, p)
 
-        # remove edges
-        T.remove_edge(c1, p)
-        T.remove_edge(c2, p)
+            # remove nodes
+            T.remove_node(c1)
+            T.remove_node(c2)
 
-        # remove nodes
-        T.remove_node(c1)
-        T.remove_node(c2)
+        # restore loop invarient
+        leaves = [x for x in T.nodes() if T.degree(x) == 1]  # get all the leaf nodes
+        one_parent = {}  # temp holding list
+        parents = []
+        for child in leaves:
+            edge = list(T.edges(child))[0]
+            if edge[1] not in one_parent:
+                one_parent[edge[1]] = child
+            else:  # add it to the list if there are 2 children with this parent
+                c2 = one_parent.pop(edge[1])  # get parent and 2nd child
+                parents.append((edge[1], child, c2))  # (parent, child 1 , child 2)
 
-    return merge_on_tree(strings, T, node_str)
+    return node_str[0]
 
 
 def clustalW(strings, draw=False, f=delta):
