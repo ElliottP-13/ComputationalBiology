@@ -18,24 +18,23 @@ def construct_alignment(P, i=-1, j=-1, blank_s=None, blank_t=None):
         # print(out_T)
         return blank_s, blank_t
 
-    move = P[i][j]
-    if blank_s is None or blank_t is None:
-        blank_s = []
-        blank_t = []
+    while i > 0 or j > 0:
+        move = P[i][j]
+        if blank_s is None or blank_t is None:
+            blank_s = []
+            blank_t = []
 
-    if move == 1:  # diagonal
-        i = i - 1
-        j = j - 1
-    elif move == 2:  # delete
-        blank_t.append(j)
-        i = i - 1
-        j = j
-    elif move == 3:  # insert
-        blank_s.append(i)
-        i = i
-        j = j - 1
-
-    blank_s, blank_t = construct_alignment(P, i, j, blank_s, blank_t)  # recur
+        if move == 1:  # diagonal
+            i = i - 1
+            j = j - 1
+        elif move == 2:  # delete
+            blank_t.append(j)
+            i = i - 1
+            j = j
+        elif move == 3:  # insert
+            blank_s.append(i)
+            i = i
+            j = j - 1
 
     return blank_s, blank_t  # return the last optimal alignment
 
