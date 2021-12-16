@@ -12,7 +12,7 @@ import networkx as nx
 
 def msa_to_cell(msa):
     o = '\"'
-    o += ', '.join(msa)
+    o += ','.join(msa)
     return o + '\"'
 
 
@@ -31,13 +31,13 @@ def run_experiment(strings, file, run_exact, func, threshold=900):
         exact_time = time.time() - st
 
         exact_msa = ed.construct_alignment(P, strings)
-        file.write(f'{exact_time}, {exact_score}, {msa_to_cell(exact_msa)}, ')
-        print(f'{exact_time}, {exact_score}, {msa_to_cell(exact_msa)}, ')
+        file.write(f'{exact_time},{exact_score},{msa_to_cell(exact_msa)},')
+        print(f'{exact_time},{exact_score},{msa_to_cell(exact_msa)},')
 
         run_exact = exact_time < threshold
     else:
         print(f'Skipping exact')
-        file.write(' , , , ')
+        file.write(',,,')
 
     center_star = cs.CenterStar(func)
 
@@ -47,8 +47,8 @@ def run_experiment(strings, file, run_exact, func, threshold=900):
 
     cs_score = SP_alignment(cs_msa, func)
 
-    file.write(f'{cs_time}, {cs_score}, {msa_to_cell(cs_msa)}, ')
-    print(f'{cs_time}, {cs_score}, {msa_to_cell(cs_msa)}, ')
+    file.write(f'{cs_time},{cs_score},{msa_to_cell(cs_msa)},')
+    print(f'{cs_time},{cs_score},{msa_to_cell(cs_msa)},')
 
     st = time.time()
     cw_msa = cw.clustalW(strings, draw=False, f=func)
@@ -56,8 +56,8 @@ def run_experiment(strings, file, run_exact, func, threshold=900):
 
     cw_score = SP_alignment(cw_msa, func)
 
-    file.write(f'{cw_time}, {cw_score}, {msa_to_cell(cw_msa)}\n')
-    print(f'{cw_time}, {cw_score}, {msa_to_cell(cw_msa)}\n')
+    file.write(f'{cw_time},{cw_score},{msa_to_cell(cw_msa)}\n')
+    print(f'{cw_time},{cw_score},{msa_to_cell(cw_msa)}\n')
     file.flush()
 
     return run_exact
@@ -131,7 +131,7 @@ def run_tree_strings_experiments(out_f = './results/num_strings.csv', string_len
         # Use BFS to build mutation/evolution tree
         while len(strings) < k:
             x = curr_nodes.pop(0)
-            neigbors = T.neighbors(x)
+            neigbors = T[x]
 
             if len(neigbors) == 1:  # leaf node
                 strings.append(string_dict[x])
@@ -146,7 +146,7 @@ def run_tree_strings_experiments(out_f = './results/num_strings.csv', string_len
         run_exact = run_experiment(strings, file, run_exact, func)
 
 if __name__ == "__main__":
-    run_rand_strings_experiments(out_f='./results/random_strings_len50.csv', string_len=50)
-    run_center_strings_experiments(out_f='./results/center_strings_len50.csv', string_len=50)
-    run_center_strings_experiments(out_f='./results/tree_strings_len50.csv', string_len=50)
+    # run_rand_strings_experiments(out_f='./results/random_strings_len50.csv', string_len=50)
+    # run_center_strings_experiments(out_f='./results/center_strings_len50.csv', string_len=50)
+    run_tree_strings_experiments(out_f='./results/tree_strings_len50.csv', string_len=50)
     pass

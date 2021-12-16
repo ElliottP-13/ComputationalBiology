@@ -275,6 +275,83 @@ We generate three different topologies for $k$ random strings.
 
 \subsection{Results}
 
+Results from experiments are shown in Figure \ref{fig:all_results}.
+Comparisons of MSA scores are in Figure \ref{fig:centerScore} - \ref{fig:treeScore},
+and comparisons of running time are in Figure \ref{fig:centerTime} - \ref{fig:treeTime}.
+The exact algorithm was only able to compute MSA for 3 and 4 strings.
+Computing MSA for 4 strings took over 20 minutes!
+On the center string topology, center star was optimal for the 3 strings, and 1 away from optimal for 4.
+This is expected given the nature of the topology. It is worth noting ClustalW also got optimal for 3 strings on center topology.
+
+\begin{figure}
+    \centering
+
+    \begin{subfigure}[b]{0.49 \textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{image001.png}
+        \caption{}
+        \label{fig:centerScore}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.49 \textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{image003.png}
+        \caption{}
+        \label{fig:randomScore}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.49 \textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{image013.png}
+        \caption{}
+        \label{fig:treeScore}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.49 \textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{image002.png}
+        \caption{}
+        \label{fig:centerTime}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.49 \textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{image004.png}
+        \caption{}
+        \label{fig:randomTime}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.49 \textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{image009.png}
+        \caption{}
+        \label{fig:treeTime}
+    \end{subfigure}
+    \caption{Results showing running time and MSA scores on different string generation strategies}
+    \label{fig:all_results}
+\end{figure}
+
+\section{Discussion}
+The results were quite surprising.
+I expected ClustalW to perform significantly better than CenterStar.
+However it clearly did not. 
+I have no idea why.
+It is possible that my data was too synthetic
+and the algorithm got no benefit from using the guide tree.
+
+The running time makes sense. Both are fairly similar, but ClustalW has an extra $k^3$ term
+so it makes sense that it would be slower.
+Both of the running times are so much shorter than the exact algorithm.
+It is absolutely absurd! I did not expect the optimal algorithm to be so slow.
+It takes over 15 minutes to solve only four strings of length 50!
+This is quite small in the grand scheme of things. 
+I hadn't anticipated the exponential term being so brutal at increasing real running time.
+
+In terms of implementation details, ClustalW was very hard.
+It requires 2 very non-trivial algorithms in order to work.
+There is also a non-zero chance that the performance of ClustalW is simply due to implementation error.
+I do not see where I went wrong, but I had to make several assumptions about what lines of code meant.
+
 
 \nocite{*}
 \singlespacing
